@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.spec
+
+# PyInstaller build artifacts
+build/
+dist/
+
+# Swap / temp
+*.swp
+*.tmp
+.lex_editor_prefs.json
+
+# Large binary dictionaries (not committed)
+ChsWubiNew.lex
+ChsWubiEUDPv1.lex
+out.lex
+
+# Release folder is committed (contains the deployable exe)
+!release/
