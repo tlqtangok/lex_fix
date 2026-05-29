@@ -22,7 +22,7 @@ Special support for auto-refreshing **`now` (current time)** and **`date` (curre
 
 ### Option A: Run the prebuilt exe (recommended, no Python required)
 
-Download `lex_editor.exe` from the [release/](release/) folder and double-click to run.
+Download `lex_editor.exe` from the [Releases page](https://github.com/tlqtangok/lex_fix/releases) and double-click to run.
 
 ### Option B: Run the Python script
 
@@ -106,30 +106,46 @@ refreshes the `now` and `date` entries every 30 seconds so they always show the 
 
 ### How it works
 
-| Code | Example value | Description |
-|------|---------------|-------------|
-| `now` | `2024-05-29 19:10:00` | Current date and time |
-| `date` | `2024-05-29` | Current date |
+| Code | Entry value | Description |
+|------|-------------|-------------|
+| `now` | `%yyyy%-%MM%-%dd% %HH%:%mm%:%ss%` | Current date and time (resolved dynamically by the IME) |
+| `date` | `%yyyy%-%MM%-%dd%` | Current date |
+
+> The Microsoft Wubi IME automatically replaces `%yyyy%`, `%MM%`, `%dd%`, `%HH%`, `%mm%`, `%ss%` with the corresponding time values at input time.
+
+### Default dictionary path
+
+The Microsoft built-in IME stores the user dictionary at:
+
+```
+%userprofile%\AppData\Roaming\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex
+```
+
+i.e. `C:\Users\<YourName>\AppData\Roaming\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex`
 
 ### Setup steps
 
-**1. Confirm the dictionary path** (default in the script):
-```
-C:\Users\<YourName>\AppData\Roaming\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex
-```
-To change it, edit line 26 (`$lex_file`) in `loop_now_data_lex.PL`.
+**1. Add the entries via the GUI**:  
+Open the dictionary file above → `Edit → Add Entry`  
+- Code: `now`, Word: `%yyyy%-%MM%-%dd% %HH%:%mm%:%ss%` → Save  
+- Code: `date`, Word: `%yyyy%-%MM%-%dd%` → Save
 
-**2. Add placeholder entries via the GUI first**:  
-Open the dictionary → `Edit → Add Entry` → Code: `now`, Word: any placeholder → Save.  
-Repeat for `date`.
+Or add both in one CLI command:
+```bat
+python lex_editor.py ^
+  --input "%userprofile%\AppData\Roaming\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex" ^
+  --output "%userprofile%\AppData\Roaming\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex" ^
+  --op add --key now  --value "%yyyy%-%MM%-%dd% %HH%:%mm%:%ss%" ^
+  --op add --key date --value "%yyyy%-%MM%-%dd%"
+```
 
-**3. Start the background refresh script** (requires [Perl / Strawberry Perl](https://strawberryperl.com/)):
+**2. Start the background refresh script** (requires [Strawberry Perl](https://strawberryperl.com/)):
 ```bash
 perl loop_now_data_lex.PL
 ```
-The script prints `OK` each time it refreshes. It updates every ~30 seconds.
+The script prints `OK` each time it refreshes (~every 30 seconds).
 
-**4. Auto-start on login (optional)**:  
+**3. Auto-start on login (optional)**:  
 Save the following as `start_lex_loop.bat` and place it in your Windows Startup folder  
 (press `Win+R`, type `shell:startup`):
 ```bat

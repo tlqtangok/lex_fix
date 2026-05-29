@@ -22,7 +22,7 @@
 
 ### 方式一：直接运行 exe（推荐，无需安装 Python）
 
-从 [release/](release/) 目录下载 `lex_editor.exe`，双击运行即可。
+前往 [Releases 页面](https://github.com/tlqtangok/lex_fix/releases) 下载最新版 `lex_editor.exe`，双击运行即可。
 
 ### 方式二：运行 Python 脚本
 
@@ -106,30 +106,46 @@ python lex_editor.py --input user.lex --output user.lex --op add --key aaaa --va
 
 ### 原理
 
-| 编码 | 词条示例 | 说明 |
-|------|----------|------|
-| `now` | `2024-05-29 19:10:00` | 当前日期时间 |
-| `date` | `2024-05-29` | 当前日期 |
+| 编码 | 词条值 | 说明 |
+|------|--------|------|
+| `now` | `%yyyy%-%MM%-%dd% %HH%:%mm%:%ss%` | 当前日期时间（输入法动态解析） |
+| `date` | `%yyyy%-%MM%-%dd%` | 当前日期 |
+
+> 微软五笔输入法会自动将 `%yyyy%`、`%MM%`、`%dd%`、`%HH%`、`%mm%`、`%ss%` 替换为对应的时间值。
+
+### 默认词库路径
+
+微软内置输入法的用户词库默认位于：
+
+```
+%userprofile%\AppData\Roaming\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex
+```
+
+即：`C:\Users\<用户名>\AppData\Roaming\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex`
 
 ### 使用步骤
 
-**1. 确认词库路径**（脚本默认路径）：
-```
-C:\Users\<用户名>\AppData\Roaming\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex
-```
-如需修改，编辑 `loop_now_data_lex.PL` 第 26 行 `$lex_file` 变量。
+**1. 用图形界面添加词条**：  
+打开上述词库文件 → `Edit → Add Entry`  
+- 编码填 `now`，词语填 `%yyyy%-%MM%-%dd% %HH%:%mm%:%ss%` → 保存  
+- 编码填 `date`，词语填 `%yyyy%-%MM%-%dd%` → 保存
 
-**2. 先用图形界面添加词条**：  
-打开词库 → `Edit → Add Entry` → 编码填 `now`，词语随便填一个占位值 → 保存。  
-同理添加 `date` 词条。
+也可以用命令行一次完成：
+```bash
+python lex_editor.py ^
+  --input "%userprofile%\AppData\Roaming\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex" ^
+  --output "%userprofile%\AppData\Roaming\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex" ^
+  --op add --key now  --value "%yyyy%-%MM%-%dd% %HH%:%mm%:%ss%" ^
+  --op add --key date --value "%yyyy%-%MM%-%dd%"
+```
 
-**3. 启动后台刷新脚本**（需安装 [Perl](https://strawberryperl.com/)）：
+**2. 启动后台刷新脚本**（需安装 [Strawberry Perl](https://strawberryperl.com/)）：
 ```bash
 perl loop_now_data_lex.PL
 ```
-脚本每 30 秒自动更新一次 `now` 和 `date` 的值，控制台会打印 `OK` 表示刷新成功。
+脚本每 30 秒自动更新一次，控制台打印 `OK` 表示刷新成功。
 
-**4. 开机自动启动（可选）**：  
+**3. 开机自动启动（可选）**：  
 将以下内容保存为 `start_lex_loop.bat`，放入 Windows 启动文件夹  
 （`Win+R` 输入 `shell:startup`）：
 ```bat
