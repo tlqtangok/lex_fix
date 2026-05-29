@@ -36,7 +36,16 @@ echo [OK] PyInstaller ready
 :: ── 3. Clean previous build ──────────────────────────────────
 if exist "%DIST%" rd /s /q "%DIST%"
 if exist "%BUILD%" rd /s /q "%BUILD%"
-if exist "%ROOT%lex_editor.spec" del /q "%ROOT%lex_editor.spec"
+if exist "%ROOT%\lex_editor.spec" del /q "%ROOT%\lex_editor.spec"
+
+:: ── 3b. Stamp _VERSION in lex_editor.py ──────────────────────
+for /f %%d in ('powershell -NoProfile -Command "Get-Date -Format yyyyMMdd"') do set "BDATE=%%d"
+for /f %%c in ('git -C "%ROOT%" rev-parse --short HEAD 2^>nul') do set "COMMITID=%%c"
+if not defined COMMITID set "COMMITID=unknown"
+set "VERSION_STR=v%BDATE%-%COMMITID%"
+echo [INFO] Version: %VERSION_STR%
+powershell -NoProfile -Command ^
+  "(Get-Content '%SCRIPT%' -Encoding UTF8) -replace '^_VERSION = \".*\"', '_VERSION = \"%VERSION_STR%\"' | Set-Content '%SCRIPT%' -Encoding UTF8"
 
 :: ── 4. Build single-file exe ─────────────────────────────────
 echo [BUILD] Running PyInstaller...

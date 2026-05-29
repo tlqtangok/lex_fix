@@ -5,6 +5,8 @@ Supports both mschxudp (user.lex) and imscwubi (ChsWubiNew.lex) formats.
 Reference: https://github.com/nopdan/rose
 """
 
+_VERSION = "v20260529-162c10e"
+
 import argparse
 import json
 import struct
@@ -782,8 +784,10 @@ class LexEditorApp:
 
         tk.Label(body, text="Wubi .lex Editor", font=("Helvetica", 15, "bold"),
                  bg=_C["win"], fg=_C["text"]).pack(anchor=tk.W)
+        tk.Label(body, text=_VERSION,
+                 font=_FONT_SM, bg=_C["win"], fg=_C["text2"]).pack(anchor=tk.W, pady=(0, 2))
         tk.Label(body, text="Microsoft Wubi IME dictionary viewer & editor",
-                 font=_FONT_SM, bg=_C["win"], fg=_C["text2"]).pack(anchor=tk.W, pady=(2, 16))
+                 font=_FONT_SM, bg=_C["win"], fg=_C["text2"]).pack(anchor=tk.W, pady=(0, 16))
 
         for label, value in [("Author", "Jidor Tang"), ("Email", "tlqtangok@126.com"),
                               ("Source", "https://github.com/tlqtangok/lex_fix")]:
