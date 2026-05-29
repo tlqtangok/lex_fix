@@ -499,11 +499,12 @@ class LexEditorApp:
         self.root.bind("<Control-n>", lambda e: self.cmd_add())
         self.root.protocol("WM_DELETE_WINDOW", self._on_close)
 
-        # auto-open last file
-        if self._recent:
-            last = self._recent[0]
-            if os.path.isfile(last):
-                self.root.after(0, lambda: self._load_file(last))
+        # auto-open last file; fall back to IME lex if no recent history
+        _ime = os.path.join(os.environ.get("USERPROFILE", ""),
+                            r"AppData\Roaming\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex")
+        _autoopen = self._recent[0] if self._recent else _ime
+        if os.path.isfile(_autoopen):
+            self.root.after(0, lambda p=_autoopen: self._load_file(p))
 
     # ---- UI construction ----
 
@@ -600,12 +601,15 @@ class LexEditorApp:
         mb = tk.Menu(self.root)
         self.root.config(menu=mb)
 
+        _IME_LEX = os.path.join(os.environ.get("USERPROFILE", ""),
+                                r"AppData\Roaming\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex")
+
         fm = tk.Menu(mb, tearoff=0)
         mb.add_cascade(label="File", menu=fm)
         fm.add_command(label="Open…\tCtrl+O", command=self.cmd_open)
-        fm.add_command(label="Open user.lex", command=lambda: self._open_named("user.lex"))
-        fm.add_command(label="Open ChsWubiNew.lex",
-                       command=lambda: self._open_named("ChsWubiNew.lex"))
+        fm.add_command(label="Open IME lex  (%userprofile%\\…\\ChsWubiEUDPv1.lex)",
+                       command=lambda: self._load_file(_IME_LEX) if os.path.isfile(_IME_LEX)
+                       else messagebox.showerror("Not found", f"File not found:\n{_IME_LEX}"))
 
         self._recent_menu = tk.Menu(fm, tearoff=0)
         fm.add_cascade(label="Open Recent", menu=self._recent_menu)
