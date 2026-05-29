@@ -785,7 +785,7 @@ class LexEditorApp:
         tk.Label(body, text="Microsoft Wubi IME dictionary viewer & editor",
                  font=_FONT_SM, bg=_C["win"], fg=_C["text2"]).pack(anchor=tk.W, pady=(2, 16))
 
-        for label, value in [("Author", "tlqtangok"), ("Email", "tlqtangok@126.com"),
+        for label, value in [("Author", "Jidor Tang"), ("Email", "tlqtangok@126.com"),
                               ("Source", "https://github.com/tlqtangok/lex_fix")]:
             row = tk.Frame(body, bg=_C["win"])
             row.pack(anchor=tk.W, pady=1)

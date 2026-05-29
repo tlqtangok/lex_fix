@@ -188,6 +188,6 @@ lex_reader/
 
 ## Author
 
-- **Author**: tlqtangok  
+- **Author**: Jidor Tang  
 - **Email**: tlqtangok@126.com  
 - **Source**: https://github.com/tlqtangok/lex_fix
