@@ -17,6 +17,7 @@ dist/
 ChsWubiNew.lex
 ChsWubiEUDPv1.lex
 out.lex
+user.lex
 
 # Release folder is committed (contains the deployable exe)
 !release/

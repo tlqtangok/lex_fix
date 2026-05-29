@@ -342,11 +342,11 @@ class LexFile:
 
         if magic == MschxudpFile.MAGIC:
             self._impl = MschxudpFile()
-            self.format_name = "mschxudp (user.lex)"
+            self.format_name = "mschxudp"
             self.read_only = False
         elif magic == ImscwubiFile.MAGIC:
             self._impl = ImscwubiFile()
-            self.format_name = "imscwubi (rose/main)"
+            self.format_name = "imscwubi"
             self.read_only = False
         else:
             raise ValueError(f"Unknown .lex magic bytes: {magic!r}")
