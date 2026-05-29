@@ -5,7 +5,7 @@ Supports both mschxudp (user.lex) and imscwubi (ChsWubiNew.lex) formats.
 Reference: https://github.com/nopdan/rose
 """
 
-_VERSION = "v20260529-162c10e"
+_VERSION = "v20260529-a81bcc8"
 
 import argparse
 import json
